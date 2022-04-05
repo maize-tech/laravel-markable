@@ -1,0 +1,70 @@
+{
+    "name": "maize-tech/laravel-markable",
+    "description": "Laravel Markable",
+    "keywords": [
+        "maize-tech",
+        "laravel",
+        "markable",
+        "likes",
+        "bookmarks",
+        "favorites"
+    ],
+    "homepage": "https://github.com/maize-tech/laravel-markable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Enrico De Lazzari",
+            "email": "enrico.delazzari@h-farm.com",
+            "homepage": "https://innovation.h-farm.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Riccardo Dalla Via",
+            "email": "riccardo.dallavia@h-farm.com",
+            "homepage": "https://innovation.h-farm.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/database": "^8.0|^9.0",
+        "illuminate/support": "^8.0|^9.0",
+        "spatie/laravel-package-tools": "^1.11.3"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.7",
+        "orchestra/testbench": "^6.23|^7.0",
+        "phpunit/phpunit": "^9.5",
+        "spatie/laravel-ray": "^1.29",
+        "vimeo/psalm": "^4.22"
+    },
+    "autoload": {
+        "psr-4": {
+            "Maize\\Markable\\": "src",
+            "Maize\\Markable\\Database\\Factories\\": "database/factories"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Maize\\Markable\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes",
+        "psalm": "vendor/bin/psalm",
+        "test": "vendor/bin/phpunit --colors=always",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Maize\\Markable\\MarkableServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
