@@ -3,6 +3,8 @@
 namespace Maize\Markable\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Maize\Markable\MarkableServiceProvider;
 use Maize\Markable\Tests\Models\User;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -27,40 +29,40 @@ class TestCase extends Orchestra
 
     public function getEnvironmentSetUp($app)
     {
-        $app['config']->set('database.default', 'sqlite');
-        $app['config']->set('database.connections.sqlite', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
-        ]);
-
-        $app['config']->set('markable.user_model', User::class);
-        $app['config']->set('markable.allowed_values.reaction', [
+        config()->set('database.default', 'testing');
+        config()->set('markable.user_model', User::class);
+        config()->set('markable.allowed_values.reaction', [
             'reaction_1',
             'reaction_2',
             'reaction_3',
             'reaction_4',
         ]);
 
-        include_once __DIR__.'/../database/migrations/create_users_table.php.stub';
-        (new \CreateUsersTable())->up();
+        $migration = include __DIR__.'/../database/migrations/create_likes_table.php.stub';
+        $migration->up();
 
-        include_once __DIR__.'/../database/migrations/create_articles_table.php.stub';
-        (new \CreateArticlesTable())->up();
+        $migration = include __DIR__.'/../database/migrations/create_favorites_table.php.stub';
+        $migration->up();
 
-        include_once __DIR__.'/../database/migrations/create_posts_table.php.stub';
-        (new \CreatePostsTable())->up();
+        $migration = include __DIR__.'/../database/migrations/create_bookmarks_table.php.stub';
+        $migration->up();
 
-        include_once __DIR__.'/../database/migrations/create_likes_table.php.stub';
-        (new \CreateLikesTable())->up();
+        $migration = include __DIR__.'/../database/migrations/create_reactions_table.php.stub';
+        $migration->up();
 
-        include_once __DIR__.'/../database/migrations/create_favorites_table.php.stub';
-        (new \CreateFavoritesTable())->up();
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+        });
 
-        include_once __DIR__.'/../database/migrations/create_bookmarks_table.php.stub';
-        (new \CreateBookmarksTable())->up();
+        Schema::create('posts', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+        });
 
-        include_once __DIR__.'/../database/migrations/create_reactions_table.php.stub';
-        (new \CreateReactionsTable())->up();
+        Schema::create('articles', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+        });
     }
 }
