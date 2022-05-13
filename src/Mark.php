@@ -13,7 +13,16 @@ use Maize\Markable\Exceptions\InvalidMarkValueException;
 
 abstract class Mark extends MorphPivot
 {
+    public $incrementing = true;
+
     abstract public static function markableRelationName(): string;
+
+    public static function markRelationName(): string
+    {
+        return Str::of(
+            class_basename(static::class)
+        )->plural()->lower()->__toString();
+    }
 
     public static function allowedValues(): ?array
     {

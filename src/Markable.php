@@ -12,7 +12,12 @@ trait Markable
     public static function bootMarkable(): void
     {
         static::registerMarks();
+
         static::addGlobalScope(new MarkableScope);
+
+        static::deleted(
+            fn ($markable) => self::deleteMarks($markable)
+        );
     }
 
     public static function marks(): array
@@ -31,33 +36,52 @@ trait Markable
         );
     }
 
-    protected static function registerMarks(): void
+    protected static function deleteMarks(self $markable): void
     {
-        foreach (static::marks() as $mark) {
-            static::registerMark($mark);
+        foreach (static::marks() as $markClass) {
+            $markModel = self::getMarkModelInstance($markClass);
+
+            $markRelationName = $markModel->markRelationName();
+
+            $markable->$markRelationName()->delete();
         }
     }
 
-    protected static function registerMark(string $mark)
+    protected static function registerMarks(): void
     {
-        $instance = new $mark;
+        foreach (static::marks() as $markClass) {
+            static::addMarkableRelation($markClass);
+        }
+    }
+
+    protected static function addMarkableRelation(string $markClass): void
+    {
+        $markModel = self::getMarkModelInstance($markClass);
+
+        static::resolveRelationUsing(
+            $markModel->markableRelationName(),
+            fn ($markable) => $markable
+                ->morphToMany(config('markable.user_model'), 'markable', $markModel->getTable())
+                ->using($markModel->getMorphClass())
+                ->withPivot('value')
+                ->withTimestamps()
+        );
+
+        static::resolveRelationUsing(
+            $markModel->markRelationName(),
+            fn ($markable) => $markable
+                ->morphMany($markClass, 'markable')
+        );
+    }
+
+    protected static function getMarkModelInstance(string $markClass): Mark
+    {
+        $instance = new $markClass;
 
         if (! $instance instanceof Mark) {
             throw InvalidMarkInstanceException::create();
         }
 
-        static::addMarkableRelation($instance);
-    }
-
-    protected static function addMarkableRelation(Mark $mark)
-    {
-        static::resolveRelationUsing(
-            $mark->markableRelationName(),
-            fn ($markable) => $markable
-                ->morphToMany(config('markable.user_model'), 'markable', $mark->getTable())
-                ->using($mark->getMorphClass())
-                ->withPivot('value')
-                ->withTimestamps()
-        );
+        return $instance;
     }
 }

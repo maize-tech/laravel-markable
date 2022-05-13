@@ -148,7 +148,7 @@ Default prefix is set to `markable_`.
 Here's an example migration for bookmarks:
 
 ``` php
-class CreateBookmarksTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -164,9 +164,12 @@ class CreateBookmarksTable extends Migration
 }
 ```
 
-Once done, you can create a new class which extends the abstract `Mark` class and implement the `markableRelationName` method, which defines the name of the relation.
+Once done, you can create a new class which extends the abstract `Mark` class and implement the `markableRelationName` method, which is used to retrieve the users who marked a given model entity with the mark entity as pivot.
 
-Here's an example model for bookmarks:
+You can also override the `markRelationName` method, which is used to retrieve the list of marks of a given model entity.
+By default, the relation name is the plural name of the mark class name.
+
+Here's an example model for the bookmarks mark:
 
 ``` php
 <?php
@@ -180,6 +183,15 @@ class Bookmark extends Mark
     public static function markableRelationName(): string
     {
         return 'bookmarkers';
+    }
+    
+    /**
+     * The override is useless in this case, as I am returning the default
+     * relation name which is the plural name of the mark class name (bookmarks, indeed)
+     */
+    public static function markRelationName(): string
+    {
+        return 'bookmarks';
     }
 }
 ```
@@ -227,15 +239,24 @@ Reaction::has($post, $user, 'heart'); // returns whether the user has reacted wi
 Reaction::count($post, 'person_raising_hand'); // returns the amount of 'person_raising_hand' reactions for the given post
 ```
 
-### Retrieve mark relation with eloquent
+### Retrieve the list of marks of an entity with eloquent
 
 ``` php
 use App\Models\Course;
 use App\Models\Post;
 
-Course::firstOrFail()->likers; // returns the collection of likes to the given course with their user
+Course::firstOrFail()->likes; // returns the collection of like marks related to the course
+Post::firstOrFail()->reactions; // returns the collection of reaction marks related to the post 
+```
 
-Post::firstOrFail()->reacters; // returns the collection of reactions to the given post with their user and value
+### Retrieve the list of users who marked an entity with eloquent
+
+``` php
+use App\Models\Course;
+use App\Models\Post;
+
+Course::firstOrFail()->likers; // returns the collection of users who liked the course along with the mark value as pivot
+Post::firstOrFail()->reacters; // returns the collection of users who reacted to the post along with the mark value as pivot
 ```
 
 ### Filter marked models with eloquent
