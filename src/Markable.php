@@ -15,7 +15,7 @@ trait Markable
 
         static::addGlobalScope(new MarkableScope);
 
-        static::deleted(
+        static::deleting(
             fn ($markable) => self::deleteMarks($markable)
         );
     }
