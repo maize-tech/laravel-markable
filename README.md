@@ -1,11 +1,9 @@
 <p align="center"><img src="/art/socialcard.png" alt="Social Card of Laravel Markable"></p>
 
-# Laravel Markable
+# Laravel Markable UUID
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/maize-tech/laravel-markable.svg?style=flat-square)](https://packagist.org/packages/maize-tech/laravel-markable)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/maize-tech/laravel-markable/run-tests?label=tests)](https://github.com/maize-tech/laravel-markable/actions?query=workflow%3ATests+branch%3Amaster)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/maize-tech/laravel-markable/Check%20&%20fix%20styling?label=code%20style)](https://github.com/maize-tech/laravel-markable/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
-[![Total Downloads](https://img.shields.io/packagist/dt/maize-tech/laravel-markable.svg?style=flat-square)](https://packagist.org/packages/maize-tech/laravel-markable)
+Fork of [Laravel Markable](https://github.com/maize-tech/laravel-markable) with support for UUIDs.<br>
+All documentation is the same as the original package.
 
 This package allows you to easily add the markable feature to your application, as for example likes, bookmarks, favorites and so on.
 
@@ -14,7 +12,7 @@ This package allows you to easily add the markable feature to your application, 
 You can install the package via composer:
 
 ```bash
-composer require maize-tech/laravel-markable
+composer require stanislavlysenko0912/laravel-markable-uuid
 ```
 
 You can publish and run the migrations with:
@@ -274,24 +272,6 @@ Post::whereHasReaction(
     'heart'
 )->get(); // returns all post models with a 'heart' reaction from the given user
 ```
-
-## Testing
-
-```bash
-composer test
-```
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
 
 ## Credits
 

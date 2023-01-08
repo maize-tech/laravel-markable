@@ -1,17 +1,24 @@
 {
-    "name": "maize-tech/laravel-markable",
-    "description": "Laravel Markable",
+    "name": "stanislavlysenko0912/laravel-markable-uuid",
+    "description": "Laravel Markable UUID",
     "keywords": [
         "maize-tech",
         "laravel",
         "markable",
         "likes",
         "bookmarks",
-        "favorites"
+        "favorites",
+        "uuid"
     ],
-    "homepage": "https://github.com/maize-tech/laravel-markable",
+    "homepage": "https://github.com/stanislavlysenko0912/laravel-markable-uuid",
     "license": "MIT",
     "authors": [
+        {
+            "name": "Stanislav Lysenko",
+            "email": "",
+            "homepage": "https://github.com/stanislavlysenko0912",
+            "role": "Fork author"
+        },
         {
             "name": "Enrico De Lazzari",
             "email": "enrico.delazzari@h-farm.com",

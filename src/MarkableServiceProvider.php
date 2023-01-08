@@ -17,7 +17,7 @@ class MarkableServiceProvider extends PackageServiceProvider
     public function configurePackage(Package $package): void
     {
         $package
-            ->name('laravel-markable')
+            ->name('laravel-markable-uuid')
             ->hasConfigFile();
     }
 
