@@ -39,7 +39,7 @@ class ReactionTest extends TestCase
         Reaction::add($article, $users[0], 'reaction_1');
         $this->assertDatabaseCount($table, 1);
         $this->assertDatabaseHas($table, [
-            'user_id' => $users[0]->getKey(),
+            'user_uuid' => $users[0]->getKey(),
             'markable_id' => $article->getKey(),
             'markable_type' => $article->getMorphClass(),
             'value' => 'reaction_1',
@@ -48,7 +48,7 @@ class ReactionTest extends TestCase
         Reaction::add($article, $users[0], 'reaction_2');
         $this->assertDatabaseCount($table, 2);
         $this->assertDatabaseHas($table, [
-            'user_id' => $users[0]->getKey(),
+            'user_uuid' => $users[0]->getKey(),
             'markable_id' => $article->getKey(),
             'markable_type' => $article->getMorphClass(),
             'value' => 'reaction_2',
@@ -60,7 +60,7 @@ class ReactionTest extends TestCase
         Reaction::add($article, $users[1], 'reaction_2');
         $this->assertDatabaseCount($table, 3);
         $this->assertDatabaseHas($table, [
-            'user_id' => $users[1]->getKey(),
+            'user_uuid' => $users[1]->getKey(),
             'markable_id' => $article->getKey(),
             'markable_type' => $article->getMorphClass(),
             'value' => 'reaction_2',
@@ -148,7 +148,7 @@ class ReactionTest extends TestCase
         Reaction::toggle($article, $users[0], 'reaction_1');
         $this->assertDatabaseCount($table, 1);
         $this->assertDatabaseHas($table, [
-            'user_id' => $users[0]->getKey(),
+            'user_uuid' => $users[0]->getKey(),
             'markable_id' => $article->getKey(),
             'markable_type' => $article->getMorphClass(),
             'value' => 'reaction_1',
@@ -157,7 +157,7 @@ class ReactionTest extends TestCase
         Reaction::toggle($article, $users[0], 'reaction_2');
         $this->assertDatabaseCount($table, 2);
         $this->assertDatabaseHas($table, [
-            'user_id' => $users[0]->getKey(),
+            'user_uuid' => $users[0]->getKey(),
             'markable_id' => $article->getKey(),
             'markable_type' => $article->getMorphClass(),
             'value' => 'reaction_2',
@@ -166,7 +166,7 @@ class ReactionTest extends TestCase
         Reaction::toggle($article, $users[0], 'reaction_2');
         $this->assertDatabaseCount($table, 1);
         $this->assertDatabaseMissing($table, [
-            'user_id' => $users[0]->getKey(),
+            'user_uuid' => $users[0]->getKey(),
             'markable_id' => $article->getKey(),
             'markable_type' => $article->getMorphClass(),
             'value' => 'reaction_2',
@@ -175,7 +175,7 @@ class ReactionTest extends TestCase
         Reaction::toggle($article, $users[1], 'reaction_3');
         $this->assertDatabaseCount($table, 2);
         $this->assertDatabaseHas($table, [
-            'user_id' => $users[1]->getKey(),
+            'user_uuid' => $users[1]->getKey(),
             'markable_id' => $article->getKey(),
             'markable_type' => $article->getMorphClass(),
             'value' => 'reaction_3',

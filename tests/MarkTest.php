@@ -20,7 +20,7 @@ class MarkTest extends TestCase
         Like::add($article, $user);
 
         $this->assertDatabaseHas((new Like)->getTable(), [
-            'user_id' => $user->getKey(),
+            'user_uuid' => $user->getKey(),
             'markable_id' => $article->getKey(),
             'markable_type' => $article->getMorphClass(),
             'value' => null,
@@ -56,7 +56,7 @@ class MarkTest extends TestCase
         Like::remove($article, $user);
 
         $this->assertDatabaseMissing((new Like)->getTable(), [
-            'user_id' => $user->getKey(),
+            'user_uuid' => $user->getKey(),
             'markable_id' => $article->getKey(),
             'markable_type' => $article->getMorphClass(),
         ]);
@@ -127,7 +127,7 @@ class MarkTest extends TestCase
         Like::toggle($article, $user);
 
         $this->assertDatabaseHas((new Like)->getTable(), [
-            'user_id' => $user->getKey(),
+            'user_uuid' => $user->getKey(),
             'markable_id' => $article->getKey(),
             'markable_type' => $article->getMorphClass(),
             'value' => null,
@@ -136,7 +136,7 @@ class MarkTest extends TestCase
         Like::toggle($article, $user);
 
         $this->assertDatabaseMissing((new Like)->getTable(), [
-            'user_id' => $user->getKey(),
+            'user_uuid' => $user->getKey(),
             'markable_id' => $article->getKey(),
             'markable_type' => $article->getMorphClass(),
         ]);

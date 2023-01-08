@@ -115,7 +115,7 @@ abstract class Mark extends MorphPivot
 
     public function getUserIdColumn(): string
     {
-        return defined('static::USER_ID') ? static::USER_ID : 'user_id';
+        return defined('static::USER_ID') ? static::USER_ID : 'user_uuid';
     }
 
     public function getQualifiedUserIdColumn(): string

@@ -66,7 +66,7 @@ class MarkableTest extends TestCase
         $mark = Like::add($article, $user);
 
         $this->assertDatabaseHas($mark->getTable(), [
-            'user_id' => $user->getKey(),
+            'user_uuid' => $user->getKey(),
             'markable_id' => $article->getKey(),
             'markable_type' => $article->getMorphClass(),
         ]);
@@ -74,7 +74,7 @@ class MarkableTest extends TestCase
         $article->delete();
 
         $this->assertDatabaseMissing($mark->getTable(), [
-            'user_id' => $user->getKey(),
+            'user_uuid' => $user->getKey(),
             'markable_id' => $article->getKey(),
             'markable_type' => $article->getMorphClass(),
         ]);
