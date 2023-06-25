@@ -37,7 +37,7 @@ abstract class Mark extends MorphPivot
             ->__toString();
     }
 
-    public static function add(Model $markable, Model $user, ?string $value = null): self
+    public static function add(Model $markable, Model $user, ?string $value = null, ?array $additionalAttributes = null): self
     {
         static::validMarkable($markable);
 
@@ -51,6 +51,11 @@ abstract class Mark extends MorphPivot
             'markable_type' => $markable->getMorphClass(),
             'value' => $value,
         ];
+
+        if (is_array($additionalAttributes)) {
+            $attributes = array_merge($additionalAttributes, $attributes);
+        }
+
         $values = static::forceSingleValuePerUser()
             ? [Arr::pull($attributes, 'value')]
             : [];
