@@ -14,14 +14,12 @@
     "authors": [
         {
             "name": "Enrico De Lazzari",
-            "email": "enrico.delazzari@h-farm.com",
-            "homepage": "https://innovation.h-farm.com",
+            "email": "enrico.delazzari@maize.io",
             "role": "Developer"
         },
         {
             "name": "Riccardo Dalla Via",
-            "email": "riccardo.dallavia@h-farm.com",
-            "homepage": "https://innovation.h-farm.com",
+            "email": "riccardo.dallavia@maize.io",
             "role": "Developer"
         }
     ],
