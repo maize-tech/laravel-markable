@@ -30,6 +30,25 @@ class ReactionTest extends TestCase
     }
 
     /** @test */
+    public function can_add_any_value_with_wildcard()
+    {
+        config()->set('markable.allowed_values.reaction', '*');
+
+        $article = Article::factory()->create();
+        $user = User::factory()->create();
+        $table = (new Reaction)->getTable();
+
+        Reaction::add($article, $user, 'random_value');
+        $this->assertDatabaseCount($table, 1);
+        $this->assertDatabaseHas($table, [
+            'user_id' => $user->getKey(),
+            'markable_id' => $article->getKey(),
+            'markable_type' => $article->getMorphClass(),
+            'value' => 'random_value',
+        ]);
+    }
+
+    /** @test */
     public function can_add_a_reaction()
     {
         $article = Article::factory()->create();
