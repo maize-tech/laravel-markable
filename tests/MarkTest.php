@@ -29,13 +29,13 @@ class MarkTest extends TestCase
     }
 
     /** @test */
-    public function can_add_a_mark_with_additional_data()
+    public function can_add_metadata()
     {
         $article = Article::factory()->create();
         $user = User::factory()->create();
 
         Favorite::add($article, $user, null, [
-            'metadata' => 'test data'
+            'test_data' => true,
         ]);
 
         $this->assertDatabaseHas((new Favorite)->getTable(), [
@@ -43,7 +43,19 @@ class MarkTest extends TestCase
             'markable_id' => $article->getKey(),
             'markable_type' => $article->getMorphClass(),
             'value' => null,
-            'metadata' => 'test data',
+            'metadata' => json_encode(['test_data' => true]),
+        ]);
+
+        Like::toggle($article, $user, null, [
+            'test_data' => true,
+        ]);
+
+        $this->assertDatabaseHas((new Like)->getTable(), [
+            'user_id' => $user->getKey(),
+            'markable_id' => $article->getKey(),
+            'markable_type' => $article->getMorphClass(),
+            'value' => null,
+            'metadata' => json_encode(['test_data' => true]),
         ]);
     }
 
