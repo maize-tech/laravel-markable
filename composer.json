@@ -14,14 +14,12 @@
     "authors": [
         {
             "name": "Enrico De Lazzari",
-            "email": "enrico.delazzari@h-farm.com",
-            "homepage": "https://innovation.h-farm.com",
+            "email": "enrico.delazzari@maize.io",
             "role": "Developer"
         },
         {
             "name": "Riccardo Dalla Via",
-            "email": "riccardo.dallavia@h-farm.com",
-            "homepage": "https://innovation.h-farm.com",
+            "email": "riccardo.dallavia@maize.io",
             "role": "Developer"
         }
     ],
@@ -32,7 +30,7 @@
         "spatie/laravel-package-tools": "^1.14.1"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.7",
+        "laravel/pint": "^1.0",
         "orchestra/testbench": "^7.0|^8.0",
         "phpunit/phpunit": "^9.5",
         "spatie/laravel-ray": "^1.29",
@@ -50,7 +48,7 @@
         }
     },
     "scripts": {
-        "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes",
+        "format": "vendor/bin/pint",
         "psalm": "vendor/bin/psalm",
         "test": "vendor/bin/phpunit --colors=always",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
