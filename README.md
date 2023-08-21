@@ -10,7 +10,7 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/maize-tech/laravel-markable.svg?style=flat-square)](https://packagist.org/packages/maize-tech/laravel-markable)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/maize-tech/laravel-markable/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/maize-tech/laravel-markable/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/maize-tech/laravel-markable/php-cs-fixer.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/maize-tech/laravel-markable/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/maize-tech/laravel-markable/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/maize-tech/laravel-markable/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/maize-tech/laravel-markable.svg?style=flat-square)](https://packagist.org/packages/maize-tech/laravel-markable)
 
 This package allows you to easily add the markable feature to your application, as for example likes, bookmarks, favorites and so on.
