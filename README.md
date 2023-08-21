@@ -141,6 +141,26 @@ Like::has($course, $user); // returns whether the given user has marked as liked
 Like::count($course); // returns the amount of like marks for the given course
 ```
 
+### Custom metadata
+
+If needed, you may also add custom metadata when assigning a mark:
+
+``` php
+use App\Models\Course;
+use Maize\Markable\Models\Like;
+
+$course = Course::firstOrFail();
+$user = auth()->user();
+
+Like::add($course, $user, [
+    'topic' => $course->topic,
+]);
+
+Like::toggle($course, $user, [
+    'topic' => $course->topic,
+]);
+```
+
 ### Custom mark model
 
 The package allows you to define custom marks.

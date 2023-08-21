@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Maize\Markable\Exceptions\InvalidMarkableInstanceException;
 use Maize\Markable\Exceptions\InvalidMarkValueException;
@@ -14,6 +15,10 @@ use Maize\Markable\Exceptions\InvalidMarkValueException;
 abstract class Mark extends MorphPivot
 {
     public $incrementing = true;
+
+    protected $casts = [
+        'metadata' => 'array',
+    ];
 
     abstract public static function markableRelationName(): string;
 
@@ -37,7 +42,7 @@ abstract class Mark extends MorphPivot
             ->__toString();
     }
 
-    public static function add(Model $markable, Model $user, string $value = null): self
+    public static function add(Model $markable, Model $user, string $value = null, array $metadata = []): self
     {
         static::validMarkable($markable);
 
@@ -51,9 +56,14 @@ abstract class Mark extends MorphPivot
             'markable_type' => $markable->getMorphClass(),
             'value' => $value,
         ];
-        $values = static::forceSingleValuePerUser()
-            ? [Arr::pull($attributes, 'value')]
-            : [];
+
+        $values = collect([
+            'metadata' => $metadata,
+        ])->when(
+            value: static::forceSingleValuePerUser(),
+            callback: fn (Collection $values) => $values
+                ->add(Arr::pull($attributes, 'value'))
+        )->toArray();
 
         return static::firstOrCreate($attributes, $values);
     }
@@ -91,11 +101,11 @@ abstract class Mark extends MorphPivot
         ])->exists();
     }
 
-    public static function toggle(Model $markable, Model $user, string $value = null)
+    public static function toggle(Model $markable, Model $user, string $value = null, array $metadata = [])
     {
         return static::has($markable, $user, $value)
             ? static::remove($markable, $user, $value)
-            : static::add($markable, $user, $value);
+            : static::add($markable, $user, $value, $metadata);
     }
 
     public static function hasAllowedValues(?string $value): bool

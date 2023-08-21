@@ -4,6 +4,7 @@ namespace Maize\Markable\Tests;
 
 use Maize\Markable\Exceptions\InvalidMarkableInstanceException;
 use Maize\Markable\Models\Bookmark;
+use Maize\Markable\Models\Favorite;
 use Maize\Markable\Models\Like;
 use Maize\Markable\Tests\Models\Article;
 use Maize\Markable\Tests\Models\Post;
@@ -24,6 +25,37 @@ class MarkTest extends TestCase
             'markable_id' => $article->getKey(),
             'markable_type' => $article->getMorphClass(),
             'value' => null,
+        ]);
+    }
+
+    /** @test */
+    public function can_add_metadata()
+    {
+        $article = Article::factory()->create();
+        $user = User::factory()->create();
+
+        Favorite::add($article, $user, null, [
+            'test_data' => true,
+        ]);
+
+        $this->assertDatabaseHas((new Favorite)->getTable(), [
+            'user_id' => $user->getKey(),
+            'markable_id' => $article->getKey(),
+            'markable_type' => $article->getMorphClass(),
+            'value' => null,
+            'metadata' => json_encode(['test_data' => true]),
+        ]);
+
+        Like::toggle($article, $user, null, [
+            'test_data' => true,
+        ]);
+
+        $this->assertDatabaseHas((new Like)->getTable(), [
+            'user_id' => $user->getKey(),
+            'markable_id' => $article->getKey(),
+            'markable_type' => $article->getMorphClass(),
+            'value' => null,
+            'metadata' => json_encode(['test_data' => true]),
         ]);
     }
 
