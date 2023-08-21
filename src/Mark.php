@@ -24,7 +24,7 @@ abstract class Mark extends MorphPivot
         )->plural()->lower()->__toString();
     }
 
-    public static function allowedValues(): ?array
+    public static function allowedValues(): array|string|null
     {
         $className = Str::lower(static::getMarkClassName());
 
@@ -100,7 +100,13 @@ abstract class Mark extends MorphPivot
 
     public static function hasAllowedValues(?string $value): bool
     {
-        return in_array($value, static::allowedValues() ?? [null]);
+        $allowedValues = static::allowedValues() ?? [null];
+
+        if ($allowedValues === '*') {
+            return true;
+        }
+
+        return in_array($value, $allowedValues);
     }
 
     public function user(): BelongsTo

@@ -245,6 +245,28 @@ Reaction::has($post, $user, 'heart'); // returns whether the user has reacted wi
 Reaction::count($post, 'person_raising_hand'); // returns the amount of 'person_raising_hand' reactions for the given post
 ```
 
+You can also use wildcards to allow any value for a specific mark.
+
+Here's an example when working with reactions:
+
+``` php
+'allowed_values' => [
+    'reaction' => '*',
+],
+```
+
+When set, you can use any value when giving a reaction:
+
+``` php
+use App\Models\Post;
+use Maize\Markable\Models\Reaction;
+
+$post = Post::firstOrFail();
+$user = auth()->user();
+
+Reaction::add($post, $user, 'random_value'); // adds the 'random_value' reaction to the post for the given user
+```
+
 ### Retrieve the list of marks of an entity with eloquent
 
 ``` php
