@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Maize\Markable\Exceptions\InvalidMarkInstanceException;
 use Maize\Markable\Scopes\MarkableScope;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 trait Markable
 {
@@ -25,7 +26,7 @@ trait Markable
         return static::$marks ?? [];
     }
 
-    public function scopeWhereHasMark(Builder $builder, Mark $mark, Model $user, string $value = null): Builder
+    public function scopeWhereHasMark(Builder $builder, Mark $mark, Model | Authenticatable $user, string $value = null): Builder
     {
         return $builder->whereHas(
             $mark->markableRelationName(),
