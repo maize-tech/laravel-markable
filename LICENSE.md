@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2023 MAIZE SRL <info@maize.io>
+Copyright (c) 2024 MAIZE SRL <info@maize.io>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
