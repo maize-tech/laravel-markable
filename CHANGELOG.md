@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-markable` will be documented in this file.
 
+## 2.2.0 - 2024-03-27
+
+### What's Changed
+
+* add Laravel 11 support by @atmonshi in https://github.com/maize-tech/laravel-markable/pull/61
+
+### New Contributors
+
+* @enricodelazzari made their first contribution in https://github.com/maize-tech/laravel-markable/pull/56
+* @atmonshi made their first contribution in https://github.com/maize-tech/laravel-markable/pull/61
+
+**Full Changelog**: https://github.com/maize-tech/laravel-markable/compare/2.1.0...2.2.0
+
 ## 2.1.0 - 2023-08-21
 
 ### What's Changed
