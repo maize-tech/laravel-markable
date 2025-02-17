@@ -2,25 +2,27 @@ name: run-tests
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   test:
     runs-on: ${{ matrix.os }}
+
     strategy:
       fail-fast: true
       matrix:
         os: [ubuntu-latest, windows-latest]
         php: [8.3, 8.2, 8.1, 8.0]
-        laravel: [11.*, 10.*, 9.*]
+        laravel: ['9.*', '10.*', '11.*', '12.*']
         stability: [prefer-lowest, prefer-stable]
         include:
           - laravel: 11.*
             testbench: 9.*
-            carbon:
-              ^3.0
+            carbon: ^3.0
           - laravel: 10.*
             testbench: 8.*
             carbon: ^2.63
@@ -33,6 +35,10 @@ jobs:
           - laravel: 11.*
             php: 8.1
           - laravel: 11.*
+            php: 8.0
+          - laravel: 12.*
+            php: 8.1
+          - laravel: 12.*
             php: 8.0
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
@@ -52,9 +58,11 @@ jobs:
         run: |
           echo "::add-matcher::${{ runner.tool_cache }}/php.json"
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "nesbot/carbon:${{ matrix.carbon }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+
       - name: Execute tests
         run: vendor/bin/phpunit
