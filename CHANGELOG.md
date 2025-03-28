@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-markable` will be documented in this file.
 
+## 2.3.1 - 2025-03-28
+
+### What's Changed
+
+* FIX "Implicitly marking parameter as nullable" issue by @enricodelazzari in https://github.com/maize-tech/laravel-markable/pull/83
+
+**Full Changelog**: https://github.com/maize-tech/laravel-markable/compare/2.3.0...2.31
+
 ## 2.3.0 - 2025-02-27
 
 ### What's Changed
