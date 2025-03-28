@@ -12,8 +12,8 @@ use Maize\Markable\Models\Reaction;
 
 class Article extends Model
 {
-    use Markable;
     use HasFactory;
+    use Markable;
 
     protected static $marks = [
         Like::class,

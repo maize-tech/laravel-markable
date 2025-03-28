@@ -9,8 +9,8 @@ use Maize\Markable\Models\Like;
 
 class Post extends Model
 {
-    use Markable;
     use HasFactory;
+    use Markable;
 
     protected static $marks = [
         Like::class,

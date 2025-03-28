@@ -25,7 +25,7 @@ trait Markable
         return static::$marks ?? [];
     }
 
-    public function scopeWhereHasMark(Builder $builder, Mark $mark, Model $user, string $value = null): Builder
+    public function scopeWhereHasMark(Builder $builder, Mark $mark, Model $user, ?string $value = null): Builder
     {
         return $builder->whereHas(
             $mark->markableRelationName(),

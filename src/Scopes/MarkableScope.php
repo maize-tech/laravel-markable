@@ -27,7 +27,7 @@ class MarkableScope implements Scope
     {
         $builder->macro(
             "whereHas{$mark::getMarkClassName()}",
-            fn (Builder $b, $user, string $value = null) => $b->whereHasMark($mark, $user, $value)
+            fn (Builder $b, $user, ?string $value = null) => $b->whereHasMark($mark, $user, $value)
         );
     }
 }

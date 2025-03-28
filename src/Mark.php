@@ -42,7 +42,7 @@ abstract class Mark extends MorphPivot
             ->__toString();
     }
 
-    public static function add(Model $markable, Model $user, string $value = null, array $metadata = []): self
+    public static function add(Model $markable, Model $user, ?string $value = null, array $metadata = []): self
     {
         static::validMarkable($markable);
 
@@ -68,7 +68,7 @@ abstract class Mark extends MorphPivot
         return static::firstOrCreate($attributes, $values);
     }
 
-    public static function remove(Model $markable, Model $user, string $value = null)
+    public static function remove(Model $markable, Model $user, ?string $value = null)
     {
         static::validMarkable($markable);
 
@@ -80,7 +80,7 @@ abstract class Mark extends MorphPivot
         ])->get()->each->delete();
     }
 
-    public static function count(Model $markable, string $value = null): int
+    public static function count(Model $markable, ?string $value = null): int
     {
         static::validMarkable($markable);
 
@@ -91,7 +91,7 @@ abstract class Mark extends MorphPivot
         ])->count();
     }
 
-    public static function has(Model $markable, Model $user, string $value = null): bool
+    public static function has(Model $markable, Model $user, ?string $value = null): bool
     {
         return static::where([
             app(static::class)->getUserIdColumn() => $user->getKey(),
@@ -101,7 +101,7 @@ abstract class Mark extends MorphPivot
         ])->exists();
     }
 
-    public static function toggle(Model $markable, Model $user, string $value = null, array $metadata = [])
+    public static function toggle(Model $markable, Model $user, ?string $value = null, array $metadata = [])
     {
         return static::has($markable, $user, $value)
             ? static::remove($markable, $user, $value)
