@@ -2,6 +2,21 @@
 
 All notable changes to `laravel-markable` will be documented in this file.
 
+## 2.3.2 - 2025-07-19
+
+#### What's Changed
+
+* Bump actions/cache from 4.2.2 to 4.2.3 by @dependabot[bot] in https://github.com/maize-tech/laravel-markable/pull/84
+* Bump dependabot/fetch-metadata from 2.3.0 to 2.4.0 by @dependabot[bot] in https://github.com/maize-tech/laravel-markable/pull/85
+* bump spatie/laravel-package-tools to 1.92.6 due to bug fix in PR #174 by @nabilhassen in https://github.com/maize-tech/laravel-markable/pull/87
+* Bump stefanzweifel/git-auto-commit-action from 5 to 6 by @dependabot[bot] in https://github.com/maize-tech/laravel-markable/pull/86
+
+### New Contributors
+
+* @nabilhassen made their first contribution in https://github.com/maize-tech/laravel-markable/pull/87
+
+**Full Changelog**: https://github.com/maize-tech/laravel-markable/compare/2.3.1...2.3.2
+
 ## 2.3.1 - 2025-03-28
 
 ### What's Changed
