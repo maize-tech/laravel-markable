@@ -34,7 +34,6 @@
         "orchestra/testbench": "^9.1|^10.0",
         "pestphp/pest": "^3",
         "pestphp/pest-plugin-laravel": "^3",
-        "spatie/laravel-ray": "^1.29",
         "larastan/larastan": "^2.9|^3.0"
     },
     "autoload": {
