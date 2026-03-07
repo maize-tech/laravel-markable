@@ -1,306 +1,260 @@
 <?php
 
-namespace Maize\Markable\Tests;
-
 use Maize\Markable\Exceptions\InvalidMarkValueException;
 use Maize\Markable\Models\Reaction;
 use Maize\Markable\Tests\Enums\ReactionType;
 use Maize\Markable\Tests\Models\Article;
 use Maize\Markable\Tests\Models\User;
 
-class ReactionTest extends TestCase
-{
-    /** @test */
-    public function cannot_add_an_invalid_reaction_value_null_fails()
-    {
-        $article = Article::factory()->create();
-        $user = User::factory()->create();
+it('cannot add an invalid reaction value null', function () {
+    $article = Article::factory()->create();
+    $user = User::factory()->create();
 
-        $this->expectException(InvalidMarkValueException::class);
-        Reaction::add($article, $user);
-    }
+    expect(fn () => Reaction::add($article, $user))->toThrow(InvalidMarkValueException::class);
+});
 
-    /** @test */
-    public function cannot_add_an_invalid_reaction_value_fails()
-    {
-        $article = Article::factory()->create();
-        $user = User::factory()->create();
+it('cannot add an invalid reaction value', function () {
+    $article = Article::factory()->create();
+    $user = User::factory()->create();
 
-        $this->expectException(InvalidMarkValueException::class);
-        Reaction::add($article, $user, 'not_valid_value');
-    }
+    expect(fn () => Reaction::add($article, $user, 'not_valid_value'))->toThrow(InvalidMarkValueException::class);
+});
 
-    /** @test */
-    public function can_add_any_value_with_wildcard()
-    {
-        config()->set('markable.allowed_values.reaction', '*');
+it('can add any value with wildcard', function () {
+    config()->set('markable.allowed_values.reaction', '*');
 
-        $article = Article::factory()->create();
-        $user = User::factory()->create();
-        $table = (new Reaction)->getTable();
+    $article = Article::factory()->create();
+    $user = User::factory()->create();
+    $table = (new Reaction)->getTable();
 
-        Reaction::add($article, $user, 'random_value');
-        $this->assertDatabaseCount($table, 1);
-        $this->assertDatabaseHas($table, [
-            'user_id' => $user->getKey(),
-            'markable_id' => $article->getKey(),
-            'markable_type' => $article->getMorphClass(),
-            'value' => 'random_value',
-        ]);
-    }
+    Reaction::add($article, $user, 'random_value');
+    $this->assertDatabaseCount($table, 1);
+    $this->assertDatabaseHas($table, [
+        'user_id' => $user->getKey(),
+        'markable_id' => $article->getKey(),
+        'markable_type' => $article->getMorphClass(),
+        'value' => 'random_value',
+    ]);
+});
 
-    /** @test */
-    public function can_add_a_reaction()
-    {
-        $article = Article::factory()->create();
-        $users = User::factory(2)->create();
-        $table = (new Reaction)->getTable();
+it('can add a reaction', function () {
+    $article = Article::factory()->create();
+    $users = User::factory(2)->create();
+    $table = (new Reaction)->getTable();
 
-        Reaction::add($article, $users[0], 'reaction_1');
-        $this->assertDatabaseCount($table, 1);
-        $this->assertDatabaseHas($table, [
-            'user_id' => $users[0]->getKey(),
-            'markable_id' => $article->getKey(),
-            'markable_type' => $article->getMorphClass(),
-            'value' => 'reaction_1',
-        ]);
+    Reaction::add($article, $users[0], 'reaction_1');
+    $this->assertDatabaseCount($table, 1);
+    $this->assertDatabaseHas($table, [
+        'user_id' => $users[0]->getKey(),
+        'markable_id' => $article->getKey(),
+        'markable_type' => $article->getMorphClass(),
+        'value' => 'reaction_1',
+    ]);
 
-        Reaction::add($article, $users[0], 'reaction_2');
-        $this->assertDatabaseCount($table, 2);
-        $this->assertDatabaseHas($table, [
-            'user_id' => $users[0]->getKey(),
-            'markable_id' => $article->getKey(),
-            'markable_type' => $article->getMorphClass(),
-            'value' => 'reaction_2',
-        ]);
+    Reaction::add($article, $users[0], 'reaction_2');
+    $this->assertDatabaseCount($table, 2);
+    $this->assertDatabaseHas($table, [
+        'user_id' => $users[0]->getKey(),
+        'markable_id' => $article->getKey(),
+        'markable_type' => $article->getMorphClass(),
+        'value' => 'reaction_2',
+    ]);
 
-        Reaction::add($article, $users[0], 'reaction_2');
-        $this->assertDatabaseCount($table, 2);
+    Reaction::add($article, $users[0], 'reaction_2');
+    $this->assertDatabaseCount($table, 2);
 
-        Reaction::add($article, $users[1], 'reaction_2');
-        $this->assertDatabaseCount($table, 3);
-        $this->assertDatabaseHas($table, [
-            'user_id' => $users[1]->getKey(),
-            'markable_id' => $article->getKey(),
-            'markable_type' => $article->getMorphClass(),
-            'value' => 'reaction_2',
-        ]);
-    }
+    Reaction::add($article, $users[1], 'reaction_2');
+    $this->assertDatabaseCount($table, 3);
+    $this->assertDatabaseHas($table, [
+        'user_id' => $users[1]->getKey(),
+        'markable_id' => $article->getKey(),
+        'markable_type' => $article->getMorphClass(),
+        'value' => 'reaction_2',
+    ]);
+});
 
-    /** @test */
-    public function can_remove_a_reaction()
-    {
-        $article = Article::factory()->create();
-        $user = User::factory()->create();
-        $table = (new Reaction)->getTable();
+it('can remove a reaction', function () {
+    $article = Article::factory()->create();
+    $user = User::factory()->create();
+    $table = (new Reaction)->getTable();
 
-        Reaction::add($article, $user, 'reaction_1');
-        $this->assertDatabaseCount($table, 1);
+    Reaction::add($article, $user, 'reaction_1');
+    $this->assertDatabaseCount($table, 1);
 
-        Reaction::remove($article, $user, 'not_valid_value');
-        $this->assertDatabaseCount($table, 1);
+    Reaction::remove($article, $user, 'not_valid_value');
+    $this->assertDatabaseCount($table, 1);
 
-        Reaction::remove($article, $user, 'reaction_1');
-        $this->assertDatabaseCount($table, 0);
-    }
+    Reaction::remove($article, $user, 'reaction_1');
+    $this->assertDatabaseCount($table, 0);
+});
 
-    /** @test */
-    public function can_count_reactions()
-    {
-        $article = Article::factory()->create();
-        $users = User::factory(2)->create();
-        $table = (new Reaction)->getTable();
+it('can count reactions', function () {
+    $article = Article::factory()->create();
+    $users = User::factory(2)->create();
 
-        $this->assertEquals(0, Reaction::count($article, 'reaction_1'));
+    expect(Reaction::count($article, 'reaction_1'))->toEqual(0);
 
-        Reaction::add($article, $users[0], 'reaction_1');
-        $this->assertEquals(1, Reaction::count($article, 'reaction_1'));
-        $this->assertEquals(0, Reaction::count($article, 'reaction_2'));
+    Reaction::add($article, $users[0], 'reaction_1');
+    expect(Reaction::count($article, 'reaction_1'))->toEqual(1);
+    expect(Reaction::count($article, 'reaction_2'))->toEqual(0);
 
-        Reaction::add($article, $users[0], 'reaction_1');
-        Reaction::add($article, $users[1], 'reaction_1');
-        $this->assertEquals(2, Reaction::count($article, 'reaction_1'));
-        $this->assertEquals(0, Reaction::count($article, 'reaction_2'));
-    }
+    Reaction::add($article, $users[0], 'reaction_1');
+    Reaction::add($article, $users[1], 'reaction_1');
+    expect(Reaction::count($article, 'reaction_1'))->toEqual(2);
+    expect(Reaction::count($article, 'reaction_2'))->toEqual(0);
+});
 
-    /** @test */
-    public function can_check_if_user_has_reaction()
-    {
-        $article = Article::factory()->create();
-        $users = User::factory(2)->create();
-        $table = (new Reaction)->getTable();
+it('can check if user has reaction', function () {
+    $article = Article::factory()->create();
+    $users = User::factory(2)->create();
 
-        $this->assertFalse(Reaction::has($article, $users[0], 'reaction_1'));
-        $this->assertFalse(Reaction::has($article, $users[1], 'reaction_1'));
+    expect(Reaction::has($article, $users[0], 'reaction_1'))->toBeFalse();
+    expect(Reaction::has($article, $users[1], 'reaction_1'))->toBeFalse();
 
-        Reaction::add($article, $users[0], 'reaction_1');
-        $this->assertTrue(Reaction::has($article, $users[0], 'reaction_1'));
-        $this->assertFalse(Reaction::has($article, $users[1], 'reaction_1'));
-    }
+    Reaction::add($article, $users[0], 'reaction_1');
+    expect(Reaction::has($article, $users[0], 'reaction_1'))->toBeTrue();
+    expect(Reaction::has($article, $users[1], 'reaction_1'))->toBeFalse();
+});
 
-    /** @test */
-    public function cannot_toggle_an_invalid_reaction_value_null_fails()
-    {
-        $article = Article::factory()->create();
-        $user = User::factory()->create();
+it('cannot toggle an invalid reaction value null', function () {
+    $article = Article::factory()->create();
+    $user = User::factory()->create();
 
-        $this->expectException(InvalidMarkValueException::class);
-        Reaction::toggle($article, $user);
-    }
+    expect(fn () => Reaction::toggle($article, $user))->toThrow(InvalidMarkValueException::class);
+});
 
-    /** @test */
-    public function cannot_toggle_an_invalid_reaction_value_fails()
-    {
-        $article = Article::factory()->create();
-        $user = User::factory()->create();
+it('cannot toggle an invalid reaction value', function () {
+    $article = Article::factory()->create();
+    $user = User::factory()->create();
 
-        $this->expectException(InvalidMarkValueException::class);
-        Reaction::toggle($article, $user, 'not_valid_value');
-    }
+    expect(fn () => Reaction::toggle($article, $user, 'not_valid_value'))->toThrow(InvalidMarkValueException::class);
+});
 
-    /** @test */
-    public function can_add_a_reaction_with_backed_enum()
-    {
-        $article = Article::factory()->create();
-        $user = User::factory()->create();
-        $table = (new Reaction)->getTable();
+it('can add a reaction with backed enum', function () {
+    $article = Article::factory()->create();
+    $user = User::factory()->create();
+    $table = (new Reaction)->getTable();
 
-        Reaction::add($article, $user, ReactionType::Like);
-        $this->assertDatabaseCount($table, 1);
-        $this->assertDatabaseHas($table, [
-            'user_id' => $user->getKey(),
-            'markable_id' => $article->getKey(),
-            'markable_type' => $article->getMorphClass(),
-            'value' => ReactionType::Like->value,
-        ]);
-    }
+    Reaction::add($article, $user, ReactionType::Like);
+    $this->assertDatabaseCount($table, 1);
+    $this->assertDatabaseHas($table, [
+        'user_id' => $user->getKey(),
+        'markable_id' => $article->getKey(),
+        'markable_type' => $article->getMorphClass(),
+        'value' => ReactionType::Like->value,
+    ]);
+});
 
-    /** @test */
-    public function can_has_a_reaction_with_backed_enum()
-    {
-        $article = Article::factory()->create();
-        $user = User::factory()->create();
+it('can has a reaction with backed enum', function () {
+    $article = Article::factory()->create();
+    $user = User::factory()->create();
 
-        $this->assertFalse(Reaction::has($article, $user, ReactionType::Like));
+    expect(Reaction::has($article, $user, ReactionType::Like))->toBeFalse();
 
-        Reaction::add($article, $user, ReactionType::Like);
-        $this->assertTrue(Reaction::has($article, $user, ReactionType::Like));
-        $this->assertFalse(Reaction::has($article, $user, ReactionType::Love));
-    }
+    Reaction::add($article, $user, ReactionType::Like);
+    expect(Reaction::has($article, $user, ReactionType::Like))->toBeTrue();
+    expect(Reaction::has($article, $user, ReactionType::Love))->toBeFalse();
+});
 
-    /** @test */
-    public function can_remove_a_reaction_with_backed_enum()
-    {
-        $article = Article::factory()->create();
-        $user = User::factory()->create();
-        $table = (new Reaction)->getTable();
+it('can remove a reaction with backed enum', function () {
+    $article = Article::factory()->create();
+    $user = User::factory()->create();
+    $table = (new Reaction)->getTable();
 
-        Reaction::add($article, $user, ReactionType::Like);
-        $this->assertDatabaseCount($table, 1);
+    Reaction::add($article, $user, ReactionType::Like);
+    $this->assertDatabaseCount($table, 1);
 
-        Reaction::remove($article, $user, ReactionType::Like);
-        $this->assertDatabaseCount($table, 0);
-    }
+    Reaction::remove($article, $user, ReactionType::Like);
+    $this->assertDatabaseCount($table, 0);
+});
 
-    /** @test */
-    public function can_toggle_a_reaction_with_backed_enum()
-    {
-        $article = Article::factory()->create();
-        $user = User::factory()->create();
-        $table = (new Reaction)->getTable();
+it('can toggle a reaction with backed enum', function () {
+    $article = Article::factory()->create();
+    $user = User::factory()->create();
+    $table = (new Reaction)->getTable();
 
-        Reaction::toggle($article, $user, ReactionType::Like);
-        $this->assertDatabaseCount($table, 1);
-        $this->assertTrue(Reaction::has($article, $user, ReactionType::Like));
+    Reaction::toggle($article, $user, ReactionType::Like);
+    $this->assertDatabaseCount($table, 1);
+    expect(Reaction::has($article, $user, ReactionType::Like))->toBeTrue();
 
-        Reaction::toggle($article, $user, ReactionType::Like);
-        $this->assertDatabaseCount($table, 0);
-        $this->assertFalse(Reaction::has($article, $user, ReactionType::Like));
-    }
+    Reaction::toggle($article, $user, ReactionType::Like);
+    $this->assertDatabaseCount($table, 0);
+    expect(Reaction::has($article, $user, ReactionType::Like))->toBeFalse();
+});
 
-    /** @test */
-    public function can_count_reactions_with_backed_enum()
-    {
-        $article = Article::factory()->create();
-        $users = User::factory(2)->create();
+it('can count reactions with backed enum', function () {
+    $article = Article::factory()->create();
+    $users = User::factory(2)->create();
 
-        $this->assertEquals(0, Reaction::count($article, ReactionType::Like));
+    expect(Reaction::count($article, ReactionType::Like))->toEqual(0);
 
-        Reaction::add($article, $users[0], ReactionType::Like);
-        Reaction::add($article, $users[1], ReactionType::Like);
-        $this->assertEquals(2, Reaction::count($article, ReactionType::Like));
-        $this->assertEquals(0, Reaction::count($article, ReactionType::Love));
-    }
+    Reaction::add($article, $users[0], ReactionType::Like);
+    Reaction::add($article, $users[1], ReactionType::Like);
+    expect(Reaction::count($article, ReactionType::Like))->toEqual(2);
+    expect(Reaction::count($article, ReactionType::Love))->toEqual(0);
+});
 
-    /** @test */
-    public function can_use_enum_class_as_allowed_values()
-    {
-        config()->set('markable.allowed_values.reaction', ReactionType::class);
+it('can use enum class as allowed values', function () {
+    config()->set('markable.allowed_values.reaction', ReactionType::class);
 
-        $article = Article::factory()->create();
-        $user = User::factory()->create();
-        $table = (new Reaction)->getTable();
+    $article = Article::factory()->create();
+    $user = User::factory()->create();
+    $table = (new Reaction)->getTable();
 
-        Reaction::add($article, $user, ReactionType::Like);
-        $this->assertDatabaseCount($table, 1);
-        $this->assertDatabaseHas($table, [
-            'value' => ReactionType::Like->value,
-        ]);
-    }
+    Reaction::add($article, $user, ReactionType::Like);
+    $this->assertDatabaseCount($table, 1);
+    $this->assertDatabaseHas($table, [
+        'value' => ReactionType::Like->value,
+    ]);
+});
 
-    /** @test */
-    public function cannot_add_invalid_value_when_allowed_values_is_enum_class()
-    {
-        config()->set('markable.allowed_values.reaction', ReactionType::class);
+it('cannot add invalid value when allowed values is enum class', function () {
+    config()->set('markable.allowed_values.reaction', ReactionType::class);
 
-        $article = Article::factory()->create();
-        $user = User::factory()->create();
+    $article = Article::factory()->create();
+    $user = User::factory()->create();
 
-        $this->expectException(InvalidMarkValueException::class);
-        Reaction::add($article, $user, 'not_a_valid_enum_value');
-    }
+    expect(fn () => Reaction::add($article, $user, 'not_a_valid_enum_value'))->toThrow(InvalidMarkValueException::class);
+});
 
-    /** @test */
-    public function can_toggle_a_reaction()
-    {
-        $article = Article::factory()->create();
-        $users = User::factory(2)->create();
-        $table = (new Reaction)->getTable();
+it('can toggle a reaction', function () {
+    $article = Article::factory()->create();
+    $users = User::factory(2)->create();
+    $table = (new Reaction)->getTable();
 
-        Reaction::toggle($article, $users[0], 'reaction_1');
-        $this->assertDatabaseCount($table, 1);
-        $this->assertDatabaseHas($table, [
-            'user_id' => $users[0]->getKey(),
-            'markable_id' => $article->getKey(),
-            'markable_type' => $article->getMorphClass(),
-            'value' => 'reaction_1',
-        ]);
+    Reaction::toggle($article, $users[0], 'reaction_1');
+    $this->assertDatabaseCount($table, 1);
+    $this->assertDatabaseHas($table, [
+        'user_id' => $users[0]->getKey(),
+        'markable_id' => $article->getKey(),
+        'markable_type' => $article->getMorphClass(),
+        'value' => 'reaction_1',
+    ]);
 
-        Reaction::toggle($article, $users[0], 'reaction_2');
-        $this->assertDatabaseCount($table, 2);
-        $this->assertDatabaseHas($table, [
-            'user_id' => $users[0]->getKey(),
-            'markable_id' => $article->getKey(),
-            'markable_type' => $article->getMorphClass(),
-            'value' => 'reaction_2',
-        ]);
+    Reaction::toggle($article, $users[0], 'reaction_2');
+    $this->assertDatabaseCount($table, 2);
+    $this->assertDatabaseHas($table, [
+        'user_id' => $users[0]->getKey(),
+        'markable_id' => $article->getKey(),
+        'markable_type' => $article->getMorphClass(),
+        'value' => 'reaction_2',
+    ]);
 
-        Reaction::toggle($article, $users[0], 'reaction_2');
-        $this->assertDatabaseCount($table, 1);
-        $this->assertDatabaseMissing($table, [
-            'user_id' => $users[0]->getKey(),
-            'markable_id' => $article->getKey(),
-            'markable_type' => $article->getMorphClass(),
-            'value' => 'reaction_2',
-        ]);
+    Reaction::toggle($article, $users[0], 'reaction_2');
+    $this->assertDatabaseCount($table, 1);
+    $this->assertDatabaseMissing($table, [
+        'user_id' => $users[0]->getKey(),
+        'markable_id' => $article->getKey(),
+        'markable_type' => $article->getMorphClass(),
+        'value' => 'reaction_2',
+    ]);
 
-        Reaction::toggle($article, $users[1], 'reaction_3');
-        $this->assertDatabaseCount($table, 2);
-        $this->assertDatabaseHas($table, [
-            'user_id' => $users[1]->getKey(),
-            'markable_id' => $article->getKey(),
-            'markable_type' => $article->getMorphClass(),
-            'value' => 'reaction_3',
-        ]);
-    }
-}
+    Reaction::toggle($article, $users[1], 'reaction_3');
+    $this->assertDatabaseCount($table, 2);
+    $this->assertDatabaseHas($table, [
+        'user_id' => $users[1]->getKey(),
+        'markable_id' => $article->getKey(),
+        'markable_type' => $article->getMorphClass(),
+        'value' => 'reaction_3',
+    ]);
+});

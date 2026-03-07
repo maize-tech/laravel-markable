@@ -4,13 +4,30 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '**.php'
+      - '.github/workflows/run-tests.yml'
+      - 'phpunit.xml.dist'
+      - 'composer.json'
+      - 'composer.lock'
   pull_request:
     branches:
       - main
+    paths:
+      - '**.php'
+      - '.github/workflows/run-tests.yml'
+      - 'phpunit.xml.dist'
+      - 'composer.json'
+      - 'composer.lock'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
     strategy:
       fail-fast: true
       matrix:
@@ -21,10 +38,8 @@ jobs:
         include:
           - laravel: 12.*
             testbench: ^10.0
-            carbon: ^3.8.4
           - laravel: 11.*
             testbench: ^9.1.0
-            carbon: ^3.8.4
         exclude:
           - laravel: 11.*
             php: 8.1
@@ -51,8 +66,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "nesbot/carbon:${{ matrix.carbon }}" --no-interaction --no-update
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
+      - name: List Installed Dependencies
+        run: composer show -D
+
       - name: Execute tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/pest --ci
