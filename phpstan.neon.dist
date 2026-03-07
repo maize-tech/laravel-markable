@@ -1,0 +1,8 @@
+includes:
+    - vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+    paths:
+        - src
+
+    level: 5
