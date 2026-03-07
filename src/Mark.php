@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Maize\Markable\Exceptions\InvalidMarkableInstanceException;
 use Maize\Markable\Exceptions\InvalidMarkValueException;
+use Maize\Markable\Support\Config;
 
 abstract class Mark extends MorphPivot
 {
@@ -33,7 +34,7 @@ abstract class Mark extends MorphPivot
     {
         $className = Str::lower(static::getMarkClassName());
 
-        return config("markable.allowed_values.{$className}");
+        return Config::getAllowedValues($className);
     }
 
     public static function getMarkClassName(): string
@@ -136,7 +137,7 @@ abstract class Mark extends MorphPivot
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(config('markable.user_model'));
+        return $this->belongsTo(Config::getUserModel());
     }
 
     public function markable(): MorphTo
@@ -158,7 +159,7 @@ abstract class Mark extends MorphPivot
     {
         if (is_null($this->table)) {
             $this->setTable(
-                config('markable.table_prefix', 'markable_').
+                Config::getTablePrefix().
                 Str::snake(Str::pluralStudly(class_basename($this)))
             );
         }
