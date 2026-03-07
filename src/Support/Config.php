@@ -4,7 +4,7 @@ namespace Maize\Markable\Support;
 
 class Config
 {
-    public static function getUserModel(): string|null
+    public static function getUserModel(): ?string
     {
         return config('markable.user_model');
     }
