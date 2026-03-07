@@ -2,6 +2,7 @@
 
 namespace Maize\Markable;
 
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -18,7 +19,12 @@ class MarkableServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('laravel-markable')
-            ->hasConfigFile();
+            ->hasConfigFile()
+            ->hasInstallCommand(function (InstallCommand $command) {
+                $command
+                    ->publishConfigFile()
+                    ->askToStarRepoOnGitHub('maize-tech/laravel-markable');
+            });
     }
 
     public function bootingPackage()
