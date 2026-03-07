@@ -287,6 +287,53 @@ $user = auth()->user();
 Reaction::add($post, $user, 'random_value'); // adds the 'random_value' reaction to the post for the given user
 ```
 
+### Using BackedEnum values
+
+You can use a `BackedEnum` class as the `allowed_values` for a mark. This lets you leverage PHP enums for type-safe mark values instead of plain strings.
+
+Define your enum:
+
+``` php
+// app/Enums/ReactionType.php
+enum ReactionType: string
+{
+    case Like = 'like';
+    case Love = 'love';
+    case Wow = 'wow';
+}
+```
+
+Set the enum class as the allowed values in `config/markable.php`:
+
+``` php
+'allowed_values' => [
+    'reaction' => \App\Enums\ReactionType::class,
+],
+```
+
+All mark methods accept `null|string|\BackedEnum`, so you can pass enum cases directly:
+
+``` php
+use App\Enums\ReactionType;
+use App\Models\Post;
+use Maize\Markable\Models\Reaction;
+
+$post = Post::firstOrFail();
+$user = auth()->user();
+
+Reaction::add($post, $user, ReactionType::Like);
+Reaction::remove($post, $user, ReactionType::Like);
+Reaction::toggle($post, $user, ReactionType::Love);
+Reaction::has($post, $user, ReactionType::Like); // bool
+Reaction::count($post, ReactionType::Wow); // int
+```
+
+The dynamic Eloquent scopes also accept enum cases:
+
+``` php
+Post::whereHasReaction($user, ReactionType::Like)->get();
+```
+
 ### Retrieve the list of marks of an entity with eloquent
 
 ``` php
