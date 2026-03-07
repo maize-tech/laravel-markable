@@ -126,10 +126,7 @@ abstract class Mark extends MorphPivot
         }
 
         if (is_string($allowedValues) && enum_exists($allowedValues)) {
-            $allowedValues = array_map(
-                fn ($case) => (string) $case->value,
-                $allowedValues::cases()
-            );
+            $allowedValues = $allowedValues::cases();
         }
 
         $allowedValues = MarkValue::resolveAll($allowedValues);
