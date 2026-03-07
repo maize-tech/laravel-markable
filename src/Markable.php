@@ -25,8 +25,10 @@ trait Markable
         return static::$marks ?? [];
     }
 
-    public function scopeWhereHasMark(Builder $builder, Mark $mark, Model $user, ?string $value = null): Builder
+    public function scopeWhereHasMark(Builder $builder, Mark $mark, Model $user, null|string|\BackedEnum $value = null): Builder
     {
+        $value = MarkValue::resolve($value);
+
         return $builder->whereHas(
             $mark->markableRelationName(),
             fn (Builder $b) => $b->where([
