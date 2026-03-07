@@ -21,17 +21,31 @@ You can install the package via composer:
 
 ```bash
 composer require maize-tech/laravel-markable
+```
+
+```bash
 php artisan markable:install
 ```
 
-The install command will automatically publish the config file. Then publish only the migrations you need and run them:
+The install command will automatically publish the config file. Then publish only the migrations you need:
 
 ```bash
-php artisan vendor:publish --tag="markable-migration-bookmark" # publishes bookmark migration
-php artisan vendor:publish --tag="markable-migration-favorite" # publishes favorite migration
-php artisan vendor:publish --tag="markable-migration-like"     # publishes like migration
-php artisan vendor:publish --tag="markable-migration-reaction" # publishes reaction migration
+php artisan vendor:publish --tag="markable-migration-bookmark"
+```
 
+```bash
+php artisan vendor:publish --tag="markable-migration-favorite"
+```
+
+```bash
+php artisan vendor:publish --tag="markable-migration-like"
+```
+
+```bash
+php artisan vendor:publish --tag="markable-migration-reaction"
+```
+
+```bash
 php artisan migrate
 ```
 
