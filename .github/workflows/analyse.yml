@@ -1,0 +1,31 @@
+name: analyse
+
+on:
+  push:
+    paths:
+      - '**.php'
+      - '.github/workflows/analyse.yml'
+      - 'phpstan.neon.dist'
+      - 'composer.json'
+      - 'composer.lock'
+
+jobs:
+  analyse:
+    name: phpstan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --error-format=github

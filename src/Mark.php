@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Maize\Markable\Exceptions\InvalidMarkableInstanceException;
 use Maize\Markable\Exceptions\InvalidMarkValueException;
+use Maize\Markable\Support\Config;
 
 abstract class Mark extends MorphPivot
 {
@@ -33,7 +34,7 @@ abstract class Mark extends MorphPivot
     {
         $className = Str::lower(static::getMarkClassName());
 
-        return config("markable.allowed_values.{$className}");
+        return Config::getAllowedValues($className);
     }
 
     public static function getMarkClassName(): string
@@ -42,9 +43,11 @@ abstract class Mark extends MorphPivot
             ->__toString();
     }
 
-    public static function add(Model $markable, Model $user, ?string $value = null, array $metadata = []): self
+    public static function add(Model $markable, Model $user, null|string|\BackedEnum $value = null, array $metadata = []): self
     {
         static::validMarkable($markable);
+
+        $value = MarkValue::resolve($value);
 
         if (! static::hasAllowedValues($value)) {
             throw InvalidMarkValueException::create();
@@ -68,9 +71,11 @@ abstract class Mark extends MorphPivot
         return static::firstOrCreate($attributes, $values);
     }
 
-    public static function remove(Model $markable, Model $user, ?string $value = null)
+    public static function remove(Model $markable, Model $user, null|string|\BackedEnum $value = null)
     {
         static::validMarkable($markable);
+
+        $value = MarkValue::resolve($value);
 
         return static::where([
             app(static::class)->getUserIdColumn() => $user->getKey(),
@@ -80,9 +85,11 @@ abstract class Mark extends MorphPivot
         ])->get()->each->delete();
     }
 
-    public static function count(Model $markable, ?string $value = null): int
+    public static function count(Model $markable, null|string|\BackedEnum $value = null): int
     {
         static::validMarkable($markable);
+
+        $value = MarkValue::resolve($value);
 
         return static::where([
             'markable_id' => $markable->getKey(),
@@ -91,8 +98,10 @@ abstract class Mark extends MorphPivot
         ])->count();
     }
 
-    public static function has(Model $markable, Model $user, ?string $value = null): bool
+    public static function has(Model $markable, Model $user, null|string|\BackedEnum $value = null): bool
     {
+        $value = MarkValue::resolve($value);
+
         return static::where([
             app(static::class)->getUserIdColumn() => $user->getKey(),
             'markable_id' => $markable->getKey(),
@@ -101,27 +110,34 @@ abstract class Mark extends MorphPivot
         ])->exists();
     }
 
-    public static function toggle(Model $markable, Model $user, ?string $value = null, array $metadata = [])
+    public static function toggle(Model $markable, Model $user, null|string|\BackedEnum $value = null, array $metadata = [])
     {
         return static::has($markable, $user, $value)
             ? static::remove($markable, $user, $value)
             : static::add($markable, $user, $value, $metadata);
     }
 
-    public static function hasAllowedValues(?string $value): bool
+    public static function hasAllowedValues(null|string|\BackedEnum $value): bool
     {
+        $resolvedValue = MarkValue::resolve($value);
         $allowedValues = static::allowedValues() ?? [null];
 
         if ($allowedValues === '*') {
             return true;
         }
 
-        return in_array($value, $allowedValues);
+        if (is_string($allowedValues) && enum_exists($allowedValues)) {
+            $allowedValues = $allowedValues::cases();
+        }
+
+        $allowedValues = MarkValue::resolveAll($allowedValues);
+
+        return in_array($resolvedValue, $allowedValues);
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(config('markable.user_model'));
+        return $this->belongsTo(Config::getUserModel());
     }
 
     public function markable(): MorphTo
@@ -143,7 +159,7 @@ abstract class Mark extends MorphPivot
     {
         if (is_null($this->table)) {
             $this->setTable(
-                config('markable.table_prefix', 'markable_').
+                Config::getTablePrefix().
                 Str::snake(Str::pluralStudly(class_basename($this)))
             );
         }

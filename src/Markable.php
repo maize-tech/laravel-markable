@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Maize\Markable\Exceptions\InvalidMarkInstanceException;
 use Maize\Markable\Scopes\MarkableScope;
+use Maize\Markable\Support\Config;
 
 trait Markable
 {
@@ -25,8 +26,10 @@ trait Markable
         return static::$marks ?? [];
     }
 
-    public function scopeWhereHasMark(Builder $builder, Mark $mark, Model $user, ?string $value = null): Builder
+    public function scopeWhereHasMark(Builder $builder, Mark $mark, Model $user, null|string|\BackedEnum $value = null): Builder
     {
+        $value = MarkValue::resolve($value);
+
         return $builder->whereHas(
             $mark->markableRelationName(),
             fn (Builder $b) => $b->where([
@@ -61,7 +64,7 @@ trait Markable
         static::resolveRelationUsing(
             $markModel->markableRelationName(),
             fn ($markable) => $markable
-                ->morphToMany(config('markable.user_model'), 'markable', $markModel->getTable())
+                ->morphToMany(Config::getUserModel(), 'markable', $markModel->getTable())
                 ->using($markModel->getMorphClass())
                 ->withPivot('value')
                 ->withTimestamps()
