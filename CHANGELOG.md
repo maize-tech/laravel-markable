@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-markable` will be documented in this file.
 
+## 3.0.0 - 2026-04-15
+
+### What's Changed
+
+* Bump aglipanci/laravel-pint-action from 2.5 to 2.6 by @dependabot[bot] in https://github.com/maize-tech/laravel-markable/pull/88
+* Bump actions/cache from 4.2.3 to 4.2.4 by @dependabot[bot] in https://github.com/maize-tech/laravel-markable/pull/89
+* Bump actions/cache from 4.2.4 to 4.3.0 by @dependabot[bot] in https://github.com/maize-tech/laravel-markable/pull/91
+* Bump dependabot/fetch-metadata from 2.4.0 to 2.5.0 by @dependabot[bot] in https://github.com/maize-tech/laravel-markable/pull/95
+* feat: add BackedEnum support and housekeeping improvements by @enricodelazzari in https://github.com/maize-tech/laravel-markable/pull/99
+
+**Full Changelog**: https://github.com/maize-tech/laravel-markable/compare/2.3.2...3.0.0
+
 ## 2.3.2 - 2025-07-19
 
 #### What's Changed
