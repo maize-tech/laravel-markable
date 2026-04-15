@@ -9,7 +9,7 @@ use Maize\Markable\Scopes\MarkableScope;
 use Maize\Markable\Support\Config;
 
 /**
- * @phpstan-require-extends \Illuminate\Database\Eloquent\Model
+ * @phpstan-require-extends Model
  */
 trait Markable
 {

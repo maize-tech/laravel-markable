@@ -178,7 +178,7 @@ abstract class Mark extends MorphPivot
             throw InvalidMarkableInstanceException::create();
         }
 
-        /** @var \Illuminate\Database\Eloquent\Model&\Maize\Markable\Markable $markable */
+        /** @var Model&Markable $markable */
         if (! in_array(static::class, $markable::marks())) {
             throw InvalidMarkableInstanceException::create();
         }
