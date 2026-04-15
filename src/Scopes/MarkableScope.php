@@ -16,7 +16,9 @@ class MarkableScope implements Scope
 
     public function extend(Builder $builder)
     {
-        $marks = $builder->getModel()::marks();
+        /** @var \Illuminate\Database\Eloquent\Model&\Maize\Markable\Markable $model */
+        $model = $builder->getModel();
+        $marks = $model::marks();
 
         foreach ($marks as $mark) {
             $this->addWhereHasMark($builder, new $mark);

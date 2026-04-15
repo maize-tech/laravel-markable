@@ -8,6 +8,9 @@ use Maize\Markable\Exceptions\InvalidMarkInstanceException;
 use Maize\Markable\Scopes\MarkableScope;
 use Maize\Markable\Support\Config;
 
+/**
+ * @phpstan-require-extends \Illuminate\Database\Eloquent\Model
+ */
 trait Markable
 {
     public static function bootMarkable(): void
