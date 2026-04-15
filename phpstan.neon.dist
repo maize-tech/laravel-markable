@@ -6,3 +6,7 @@ parameters:
         - src
 
     level: 5
+
+    ignoreErrors:
+        - '#Call to an undefined static method .+::marks\(\)#'
+        - '#Trait .+ is used zero times and is not analysed#'

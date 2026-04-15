@@ -178,7 +178,6 @@ abstract class Mark extends MorphPivot
             throw InvalidMarkableInstanceException::create();
         }
 
-        /** @var Model&Markable $markable */
         if (! in_array(static::class, $markable::marks())) {
             throw InvalidMarkableInstanceException::create();
         }

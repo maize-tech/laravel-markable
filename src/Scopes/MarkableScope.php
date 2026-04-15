@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 use Maize\Markable\Mark;
-use Maize\Markable\Markable;
 
 class MarkableScope implements Scope
 {
@@ -17,9 +16,7 @@ class MarkableScope implements Scope
 
     public function extend(Builder $builder)
     {
-        /** @var Model&Markable $model */
-        $model = $builder->getModel();
-        $marks = $model::marks();
+        $marks = $builder->getModel()::marks();
 
         foreach ($marks as $mark) {
             $this->addWhereHasMark($builder, new $mark);
